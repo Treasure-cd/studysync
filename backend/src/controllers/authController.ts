@@ -6,6 +6,9 @@ import type { FieldValidators } from "../utils/validateFields.js";
 import { hashPassword } from "../utils/passwordHash.js";
 import comparePasswords from "../utils/comparePasswords.js";
 import jwt from 'jsonwebtoken';
+import crypto from "crypto";
+
+const csrfToken = crypto.randomBytes(32).toString("hex");
 
 type PublicUser = {
   id: string;
@@ -66,7 +69,7 @@ export const getUserByIdentifierController = async(req: Request, res: Response, 
        return next(createError("Request body required", 400));
     }
 
-    const identifier = req.body.email?.trim() || req.body.username.trim();
+    const identifier = req.body.identifier?.trim();
     const password = req.body.password?.trim();
 
     const data = {
@@ -105,9 +108,16 @@ export const getUserByIdentifierController = async(req: Request, res: Response, 
     { expiresIn: "1h" }
     );
             
-    res.cookie("token", token, {
+    res.cookie("token", jwt, {
         httpOnly: true,
+        sameSite: "lax",
     })
+    .cookie("csrf", csrfToken, {
+        httpOnly: false,
+        sameSite: "lax",
+    });
+
+ 
 
     res.status(201).json({
         success: true,

@@ -7,7 +7,6 @@ interface AuthUser {
 }
 
 export const getMe = async(req: Request, res: Response, next: NextFunction) => {
-    try {
     if (!req.user) {
         console.log("Problem is no user, req.user failed")
         return next(createError("Unauthorized", 401));
@@ -37,7 +36,5 @@ export const getMe = async(req: Request, res: Response, next: NextFunction) => {
         timezone: user.timezone,
       },
     });
-} catch (err) {
-    next(err);
-}
+
 }
