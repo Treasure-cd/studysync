@@ -7,7 +7,7 @@ const options: swaggerJsdoc.Options = {
     definition: {
         openApi: "3.0.0",
         info: {
-            title: "FocusPair Docs",
+            title: "StudySync Docs",
             version: "1.0.0",
         },
     },
