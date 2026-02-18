@@ -2,16 +2,17 @@ import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import { createError } from "../utils/createError.js";
 
-export const cookieJwtAuth = (
+export const jwtAuth = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const token = req.cookies?.token;
-
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.split(' ')[1];
+    console.log(token);
     if (!token) {
-        console.log("Problem is unauthorized lol")
+        console.log("Problem is unauthorized lmao")
       return next(createError("Unauthorized", 401))
     }
 

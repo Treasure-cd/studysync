@@ -7,13 +7,14 @@
     margin: 0;
   --background: #f2f7ff;
   --foreground: #171717;
-  --inputbg: #f9fafb;
+  --loaderborder: #1d293d;
 }
 
 html.dark {
   --background: #000b1a;
   --foreground: #ededed;
   --inputbg: #030712;
+  --loader-border: #cad5e2;
 }
 
 @theme inline {
@@ -26,7 +27,13 @@ html.dark {
   --color-inputbg: var(--inputbg);
   --color-darkbackground: #000b1a;
   --color-lightbackground: #f2f7ff;
+  --color-loaderborder: var(--loader-border)
+  
 }
+
+
+
+
 
 body {
   background: var(--background);

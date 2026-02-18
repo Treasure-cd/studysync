@@ -4,6 +4,13 @@ import TextInput from "./ui/TextInput";
 import Button from "./ui/Button";
 import { useState, useEffect } from "react";
 import { SignInIcon } from "@phosphor-icons/react";
+import ky from "ky";
+import { HTTPError } from 'ky';
+import { getApiBaseUrl } from "@/utils/getBaseUrl";
+import Loader from "./ui/Loader";
+import { useToast } from "@/hooks/useToast";
+import { signup } from "@/app/actions/auth";
+
 
 const SignupForm = () => {
    const [email, setEmail] = useState("");
@@ -15,6 +22,14 @@ const SignupForm = () => {
     const [usernameError, setUsernameError] = useState<string | null>("");
     const [isPasswordValid, setIsPasswordValid] = useState(true);
     const [passwordError, setPasswordError] = useState<string | null>("");
+    const [isEmailTouched, setIsEmailTouched] = useState(false);
+    const [isUsernameTouched, setIsUsernameTouched] = useState(false);
+    const [isPasswordTouched, setIsPasswordTouched] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const { showToast } = useToast();
+
+
+
 
 
     const validateEmail = (email: string): string | null => {
@@ -60,6 +75,25 @@ const SignupForm = () => {
       setIsPasswordValid(passwordValid === null);
     }, [email, username, password])
 
+    const handleSubmit = async() => {
+      try {
+      setIsLoading(true);
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      await signup(email, username, password, tz);
+      setIsLoading(false);
+      }
+      catch (err) {
+          setIsLoading(false);
+          if (err instanceof HTTPError) {
+          const errorData = await err.response.json();
+          console.log("Backend Error Message:", errorData.message || errorData);
+          showToast(errorData.message, "bad");
+        }
+      }
+    }
+    
+
+
   return (
     <>
          <div className="flex flex-col p-1 mb-2">
@@ -70,8 +104,8 @@ const SignupForm = () => {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
             isValid={isEmailValid}
-            errorText={emailError}
-
+            errorText={isEmailTouched? emailError: null}
+            onBlur={() => setIsEmailTouched(true)}
           />  
         </div>
         <div className="flex flex-col p-1 mb-2">
@@ -82,7 +116,8 @@ const SignupForm = () => {
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Enter your username"
             isValid={isUsernameValid}
-            errorText={usernameError}
+            errorText={isUsernameTouched? usernameError: null}
+            onBlur={() => setIsUsernameTouched(true)}
 
           />  
         </div>
@@ -95,19 +130,24 @@ const SignupForm = () => {
             placeholder="Enter your password"
             showPasswordToggle
             isValid={isPasswordValid}
-            errorText={passwordError}
+            errorText={isPasswordTouched? passwordError: null}
+            onBlur={() => setIsPasswordTouched(true)}
            />  
         </div>
         <div className="flex flex-col p-1 my-2.5 items-center">  
         <Button
             type="form-button"
-            disabled={!isEmailValid || !isPasswordValid || !isUsernameValid}
+            disabled={!isEmailValid || !isPasswordValid || !isUsernameValid || isLoading}
+            onClick={handleSubmit}
          >
-          Sign Up <SignInIcon />
+          {isLoading?
+            (<Loader />) :  <>Sign Up <SignInIcon /></> 
+          }
+           
          </Button>
          </div>
     </>
   )
 }
 
-export default SignupForm
+export default SignupForm;

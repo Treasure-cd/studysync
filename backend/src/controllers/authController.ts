@@ -107,17 +107,6 @@ export const getUserByIdentifierController = async(req: Request, res: Response, 
     process.env.SECRET_KEY,
     { expiresIn: "1h" }
     );
-            
-    res.cookie("token", jwt, {
-        httpOnly: true,
-        sameSite: "lax",
-    })
-    .cookie("csrf", csrfToken, {
-        httpOnly: false,
-        sameSite: "lax",
-    });
-
- 
 
     res.status(201).json({
         success: true,

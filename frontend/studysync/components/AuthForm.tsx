@@ -1,18 +1,19 @@
 "use client"
 
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { useSearchParams } from "next/navigation";
-import { usePathname } from "next/navigation";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
 import Button from "./ui/Button";
 import { GoogleLogoIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 
+
 const AuthForm = ({ mode }: { mode: string | string[] | undefined }) => {
 
     const searchParams = useSearchParams();
-    const pathname = usePathname();
+
+
 
    const currentMode = searchParams.get('mode') || mode;
 
@@ -36,6 +37,7 @@ const AuthForm = ({ mode }: { mode: string | string[] | undefined }) => {
         <div className="flex flex-col p-1 my-2.5 items-center">  
         <Button
             type="sec-form-button"
+
          >
             <GoogleLogoIcon weight="bold" />
              Sign In with Google 

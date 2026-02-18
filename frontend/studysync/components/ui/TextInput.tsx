@@ -10,8 +10,9 @@ interface TextInputProps {
     placeholder: string;
     errorText?: string | null;
     showPasswordToggle?: boolean;
+    onBlur?: () => void;
 }
-const TextInput = ({ type = "text", onChange, value, placeholder, isValid = true, errorText, showPasswordToggle = false }: TextInputProps) => {
+const TextInput = ({ type = "text", onChange, onBlur, value, placeholder, isValid = true, errorText, showPasswordToggle = false }: TextInputProps) => {
 
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const borderClass = !isValid 
@@ -31,6 +32,7 @@ const TextInput = ({ type = "text", onChange, value, placeholder, isValid = true
         onChange={onChange}
         value={value}
         placeholder={placeholder}
+        onBlur={onBlur}
         className={`w-full py-1 px-2 bg-inputbg border border-solid border-primary/40 focus:outline-none focus:border-primary/80 focus:border-2 rounded-sm ${borderClass}`}
         />
         {showPasswordToggle && (

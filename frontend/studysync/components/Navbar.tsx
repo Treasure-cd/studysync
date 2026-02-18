@@ -12,7 +12,7 @@ const Navbar = () => {
 
   const pathname = usePathname();
 
-  if (pathname === "/signin") return null;
+  if (pathname === "/signin" || pathname === "/dev") return null;
   return (
     <nav className='p-3 bg-black/10 backdrop-blur-lg flex flex-row justify-between sticky top-0'>
       <div className="flex flex-row items-center">

@@ -3,6 +3,8 @@ import { Source_Sans_3, Merriweather, Cabin } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import Navbar from "@/components/Navbar";
+import Toast from "@/components/ui/Toast";
+
 
 
 // type Props<As extends React.ElementType = "a"> = 
@@ -44,6 +46,7 @@ export default function RootLayout({
       <Providers>
         <Navbar />
         {children}
+         <Toast />
       </Providers>
         
   

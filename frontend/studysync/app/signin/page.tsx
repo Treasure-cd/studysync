@@ -1,10 +1,11 @@
 import AuthForm from "@/components/AuthForm";
 
-const page = ({ searchParams }: {
-  searchParams: { [key: string]: string | string[] | undefined }
+const page = async ({ searchParams }: {
+  searchParams: Promise<{[key: string]: string | string[] | undefined}>;
 }) => {
 
-  const mode: string | string[] | undefined  = searchParams.mode || 'login';
+  const fetchedSearchParams = await searchParams;
+  const mode: string | string[] | undefined  = fetchedSearchParams.mode || 'login';
 
     
 

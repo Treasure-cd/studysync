@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import router from "./routes/routes.js";
 import logger from "./middleware/logger.js";
 import errorHandler from "./middleware/errorHandler.js";
@@ -11,6 +12,10 @@ const PORT = 5000;
 
 const app = express();
 
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true,
+}));
 app.use(express.json());
 app.use(cookieParser());
 app.use(logger);

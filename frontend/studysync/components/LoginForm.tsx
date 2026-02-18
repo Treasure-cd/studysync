@@ -3,6 +3,13 @@ import TextInput from "./ui/TextInput"
 import Button from "./ui/Button"
 import { useState, useEffect } from "react"
 import { SignInIcon } from "@phosphor-icons/react"
+import ky from "ky"
+import { getApiBaseUrl } from "@/utils/getBaseUrl"
+import Loader from "./ui/Loader"
+import { HTTPError } from 'ky';
+import { useToast } from "@/hooks/useToast";
+import { useRouter } from "next/navigation"
+import { login } from "../app/actions/auth"
 
 
 const LoginForm = () => {
@@ -13,6 +20,11 @@ const LoginForm = () => {
     const [identifierError, setIdentifierError] = useState<string | null>("");
     const [isPasswordValid, setIsPasswordValid] = useState(true);
     const [passwordError, setPasswordError] = useState<string | null>("");
+    const [isIdentiierTouched, setIsIdentifierTouched] = useState(false);
+    const [isPasswordTouched, setIsPasswordTouched] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const { showToast } = useToast();
+    const router = useRouter();
 
 
     const validateIdentifier = (identifier: string): string | null => {
@@ -27,12 +39,11 @@ const LoginForm = () => {
     }
 
     const validatePassword = (password: string): string | null => {
-      const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+      const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     
       if (!regex.test(password)) {
         if (password.trim().length < 8) return "Password must be more than 8 characters";
         if (!/\d/.test(password)) return "Password must contain at least one digit";
-        if (!/@$!%*#?&/.test(password)) return "Password must contain at least one special character";
         
       }
       return null;
@@ -50,6 +61,25 @@ const LoginForm = () => {
     }, [identifier, password])
 
 
+    const handleSubmit = async() => {
+      try {
+        setIsLoading(true);
+        await login(identifier, password);
+        setIsLoading(false);
+        router.push("/home")
+        
+      } catch (err) {
+        setIsLoading(false);
+        if (err instanceof HTTPError) {
+        const errorData = await err.response.json();
+        console.log("Backend Error Message:", errorData.message || errorData);
+        showToast(errorData.message, "bad");
+      }
+      }
+
+    }
+
+
   return (
     <>
          <div className="flex flex-col p-1 mb-2">
@@ -60,7 +90,9 @@ const LoginForm = () => {
             onChange={(e) => setIdentifier(e.target.value)}
             placeholder="Enter your email or username"
             isValid={isIdentifierValid}
-            errorText={identifierError}
+            errorText={isIdentiierTouched? identifierError: null}
+            onBlur={() => setIsIdentifierTouched(true)}
+            
 
           />  
         </div>
@@ -73,17 +105,23 @@ const LoginForm = () => {
             placeholder="Enter your password"
             showPasswordToggle
             isValid={isPasswordValid}
-            errorText={passwordError}
+            errorText={isPasswordTouched? passwordError: null}
+            onBlur={() => setIsPasswordTouched(true)}
            />  
         </div>
         <div className="flex flex-col p-1 my-2.5 items-center">  
         <Button
             type="form-button"
-            disabled={!isPasswordValid || !isIdentifierValid}
+            disabled={!isPasswordValid || !isIdentifierValid || isLoading}
+            onClick={handleSubmit}
          >
-          Login <SignInIcon />
+          {isLoading?
+            (<Loader />) :  <>Sign Up <SignInIcon /></> 
+          }
          </Button>
          </div>
+
+
 
     </>
   )
