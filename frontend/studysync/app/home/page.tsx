@@ -4,11 +4,6 @@ import User from '@/components/User';
 
 const page = async() => {
 
-  const cookieStore = await cookies();
-  const token = cookieStore.get('token')?.value
-  if (!token) redirect('/login');
-
-  console.log(token);
 
 
 

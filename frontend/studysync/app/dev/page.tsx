@@ -1,5 +1,4 @@
 import Loader from "@/components/ui/Loader";
-import Toast from "@/components/ui/Toast";
 
 export default function DevPage() {
   return (
@@ -9,7 +8,7 @@ export default function DevPage() {
 
       <section>
 
-        <Toast message="Invalid username, email or password" iconType="bad" />
+      
         <h2>Loading States</h2>
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
           <div>
@@ -31,7 +30,7 @@ export default function DevPage() {
 
       <hr style={{ margin: '40px 0', borderColor: '#333' }} />
 
-      {/* --- Section: Buttons --- */}
+    
       <section>
         <h2>Buttons</h2>
         <div style={{ display: 'flex', gap: '10px' }}>

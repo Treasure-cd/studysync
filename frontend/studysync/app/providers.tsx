@@ -1,11 +1,14 @@
 "use client";
 
 import { ThemeProvider } from "next-themes";
-import ToastProvider from "@/context/ToastProvider";
+import { ToastProvider } from "@/context/ToastProvider";
+import { AuthProvider } from "@/context/AuthProvider";
+import { User } from "./types/userType";
 
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({ children, user }: { children: React.ReactNode, user: User | null }) {
   return (
+    <AuthProvider initialUser={user}>
     <ThemeProvider
       attribute="class"
       defaultTheme="system"
@@ -17,5 +20,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
       </ToastProvider>
 
     </ThemeProvider>
+    </AuthProvider>
   );
 }

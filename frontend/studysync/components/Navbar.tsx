@@ -3,7 +3,8 @@ import Link from "next/link"
 import dynamic from 'next/dynamic'
 import Button from "./ui/Button"
 import { usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
+import { getUserFromCookie } from "@/utils/getUser"
+
 
 const ThemeToggle = dynamic(() => import("./ThemeToggle"), { ssr: false })
 
@@ -17,7 +18,8 @@ const Navbar = () => {
     <nav className='p-3 bg-black/10 backdrop-blur-lg flex flex-row justify-between sticky top-0'>
       <div className="flex flex-row items-center">
         <a href="localhost:3000">
-        <h2 className='font-logo text-2xl font-extrabold pl-7 cursor-pointer'>
+        <h2 className='font-logo
+         text-2xl font-extrabold pl-7 cursor-pointer'>
             StudySync
         </h2>
         </a>

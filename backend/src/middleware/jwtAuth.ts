@@ -11,11 +11,11 @@ export const jwtAuth = (
     const authHeader = req.headers.authorization;
     const token = authHeader?.split(' ')[1];
     console.log(token);
+    
     if (!token) {
-        console.log("Problem is unauthorized lmao")
       return next(createError("Unauthorized", 401))
     }
-
+console.log("Token loaded")
     const secret = process.env.SECRET_KEY;
     if (!secret) {
       throw new Error("SECRET_KEY not configured");

@@ -105,7 +105,7 @@ export const getUserByIdentifierController = async(req: Request, res: Response, 
     const token = jwt.sign(
     { sub: publicUser.id },
     process.env.SECRET_KEY,
-    { expiresIn: "1h" }
+    { expiresIn: "7d" }
     );
 
     res.status(201).json({

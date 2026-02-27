@@ -4,11 +4,8 @@ import TextInput from "./ui/TextInput";
 import Button from "./ui/Button";
 import { useState, useEffect } from "react";
 import { SignInIcon } from "@phosphor-icons/react";
-import ky from "ky";
-import { HTTPError } from 'ky';
-import { getApiBaseUrl } from "@/utils/getBaseUrl";
 import Loader from "./ui/Loader";
-import { useToast } from "@/hooks/useToast";
+import { useToast } from "@/context/ToastProvider";
 import { signup } from "@/app/actions/auth";
 
 
@@ -80,15 +77,11 @@ const SignupForm = () => {
       setIsLoading(true);
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
       await signup(email, username, password, tz);
-      setIsLoading(false);
       }
-      catch (err) {
-          setIsLoading(false);
-          if (err instanceof HTTPError) {
-          const errorData = await err.response.json();
-          console.log("Backend Error Message:", errorData.message || errorData);
-          showToast(errorData.message, "bad");
-        }
+      catch (err: any) {
+         showToast(err.message, "bad");
+      } finally {
+         setIsLoading(false);
       }
     }
     

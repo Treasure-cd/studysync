@@ -1,7 +1,7 @@
 "use client"
 
 import { CheckCircleIcon, XCircleIcon, WarningCircleIcon } from "@phosphor-icons/react";
-import { useToast } from "@/hooks/useToast";
+import { useToast } from "@/context/ToastProvider";
 
 const Toast = () => {
 

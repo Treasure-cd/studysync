@@ -1,22 +1,15 @@
 'use client'
 
-import { getMe } from "@/app/actions/user";
-import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthProvider";
+
 const User = () => {
 
-    const [user, setUser] = useState();
-useEffect(() => {
-    const fetchUser = async () => {
-        const userObject = await getMe();
-        setUser(userObject);
-    };
+  const { user } = useAuth();
 
-    fetchUser();
-}, []);
 
 
   return (
-    <div>{user? user.user.email: "No user"}</div>
+    <div>{user? user?.user.username: "No User"}</div>
   )
 }
 

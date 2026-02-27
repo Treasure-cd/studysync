@@ -1,4 +1,7 @@
-import React, { useState, useRef } from 'react';
+"use client"
+
+import React, { useState, useRef, useContext } from 'react';
+import { createContext } from 'react';
 
 type ToastContextType = {
   isShowing: boolean;
@@ -7,12 +10,18 @@ type ToastContextType = {
   showToast: (message: string, icon: "good" | "bad" | "warning") => void;
 };
 
-export const ToastContext = React.createContext<ToastContextType | undefined>(undefined);
+export const ToastContext = createContext<ToastContextType>({
+  isShowing: false,
+  message: "",
+  iconType: "good",
+  showToast: () => {}
+
+});
 
 
-const ToastProvider = ({ children }:  { children: React.ReactNode }) => {
+export const ToastProvider = ({ children }:  { children: React.ReactNode }) => {
 
-    const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [isShowing, setIsShowing] = useState(false);
     const [message, setMessage] = useState("");
     const [iconType, setIconType] = useState<"good" | "bad" | "warning">("good");
@@ -46,4 +55,4 @@ const ToastProvider = ({ children }:  { children: React.ReactNode }) => {
 };
 
 
-export default ToastProvider;
+export const useToast = () => useContext(ToastContext)
